@@ -1,6 +1,11 @@
 <script setup>
     import { ref, onMounted } from 'vue';
+
+    const props = defineProps({
+        verticalView : false,
+    }) 
     
+
     const newTask = ref(false)   
     const mainWrapper = ref()
     const isActionOpen = ref(false)
@@ -25,7 +30,7 @@
 
 </script>
 <template>
-     <div ref="board" class="relative float-left mt-4 mr-8 border w-[300px] min-h-[100px] h-max rounded-lg shadow-md">
+     <div ref="board" class="relative float-left mt-4 border w-[300px] min-h-[100px] h-max rounded-lg shadow-md"  :class="{'w-[700px] mx-auto' :  verticalView, 'mr-8' : !verticalView}">
             <div class="p-4">
                      <div class="flex items-center justify-between">
                 <label for="" class="text-gray-500 text-lg">Task 1</label>
@@ -117,5 +122,5 @@
                     </li>
                 </ul>
             </div>
-        </div>  
+    </div>  
 </template>

@@ -4,10 +4,20 @@
 
     const menuOpen = ref(false);
 
+    const verticalView = ref(false);
+
+
+    const emit = defineEmits(['view'])
+
+    function view(){
+        verticalView.value = verticalView.value == false ? true :  false;
+        emit('view')
+    }
+
 </script>
 
 <template>
-    <div class="fixed top-0 left-0 w-full flex items-center  border-b shadow-sm">
+    <div class="fixed top-0 left-0 w-full flex items-center  bg-white border-b shadow-sm z-20">
         <div class="w-full flex justify-between mx-auto p-2">
             <div class="flex">
                 <div @click="menuOpen=true" class="ml-4 icon-menu rounded-full hover:bg-gray-200">
@@ -40,9 +50,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                 </div>
-                <div class="icon-menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <!-- view --> 
+                <div @click="view" class="icon-menu">
+                    <svg v-if="!verticalView" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
+                    </svg>
+                    <svg  v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                     </svg>
                 </div>
                 <div class="icon-menu">

@@ -4,12 +4,20 @@
 
 import Header from './components/Header.vue';
 import Content from './components/Content.vue';
+import { ref } from 'vue'
+
+const verticalView = ref(false);
+
+  function view(){   
+      verticalView.value = verticalView.value == false ? true : false;
+  }
+
 
 </script>
 
 <template>
-  <Header></Header>
-  <Content></Content>
+  <Header  @view="view"></Header>
+  <Content :verticalView="verticalView"></Content>
 </template>
 
 <style>

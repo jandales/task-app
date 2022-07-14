@@ -16,7 +16,7 @@
    
 </script>
 <template>
-<div @click="close($event)" ref="main" id="main-wrapper" class="hidden w-full min-h-screen absolute z-20 top-0 left-0 bg-black bg-opacity-50 transition-all ease-in-out duration-[500ms]" :class="{'!block' : isOpen}">
+<div @click="close($event)" ref="main" id="main-wrapper" class="hidden w-full min-h-screen fixed z-20 top-0 left-0 bg-black bg-opacity-50 transition-all ease-in-out duration-[500ms]" :class="{'!block' : isOpen}">
     <div class="w-[300px] min-h-screen bg-white fixed left-[-300px] transition-all ease-in-out duration-[300ms]" :class="{'!left-0' : isOpen}" >
         <div class="border-b px-4 py-1">
            <div class="flex items-center">
