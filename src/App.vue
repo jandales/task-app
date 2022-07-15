@@ -4,7 +4,9 @@
 
 import Header from './components/Header.vue';
 import Content from './components/Content.vue';
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+
+
 
 const verticalView = ref(false);
 
@@ -12,6 +14,9 @@ const verticalView = ref(false);
       verticalView.value = verticalView.value == false ? true : false;
   }
 
+
+
+  
 
 </script>
 

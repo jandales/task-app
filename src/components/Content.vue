@@ -1,13 +1,45 @@
 <script setup>    
 import List from './List.vue'
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
     const props = defineProps({
         verticalView : Boolean,
     })
 
     const isOpen = ref(false);
-    const newList = ref(false)  
+    const newList = ref(false);
+
+    const Lists = ref([]);
+
+    const list = [
+        { id : 1, name  : 'list 1', tasks : [
+            {
+                id : 1, name : 'task 1', dueDate : 'null' 
+            },
+            {
+                id : 2, name : 'task 2', dueDate : 'null',              
+            },
+            {
+                id : 3, name : 'task 3', dueDate : 'null',               
+            },
+            {
+                id : 4, name : 'task 4', dueDate : 'null',               
+            },
+            {
+                id : 5, name : 'task 5', dueDate : 'null',
+            }
+        ] },
+        { id : 2, name  : 'list 2' },
+        { id : 3, name  : 'list 3' },
+        { id : 4, name  : 'list 4' },
+        { id : 5, name  : 'list 5' },
+        { id : 6, name  : 'list 6' },
+        { id : 7, name  : 'list 7' },
+        { id : 8, name  : 'list 8' },
+        { id : 9, name  : 'list 9' },
+    ]
+
+    Lists.value = [...list];
 
     function toggleActionButton(){
         isOpen.value = isOpen.value == false ? true : false;
@@ -26,11 +58,14 @@ import { ref } from 'vue';
    
     document.addEventListener('click', handleCloseNewTask)
 
+    onMounted(() => {
+      
+    })
 
 </script>
 <template>
-    <div ref="mainWrapper" class="relative w-full mx-auto px-8 mt-16" :class="{ 'mb-8' : verticalView}">
-        <div v-if="!verticalView" class="group relative overflow-hidden w-full flex">
+    <div ref="mainWrapper" class="relative  w-full mx-auto px-8 mt-16" :class="{ 'mb-8' : verticalView}">
+        <div v-if="!verticalView" class="group fixed overflow-hidden w-full flex">
             <div  class="w-full flex items-center  mt-4  transition-all ease-in-out duration-300 ml-[-35px] cursor-default hover:ml-0"> 
                 <span class="p-1 rounded-full hover:bg-gray-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -73,9 +108,9 @@ import { ref } from 'vue';
                 </ul>
             </div>  
         </div>
-        <div id="main" class="inline-flex  min-h-[calc(100vh_-_122px)]" :class="{'w-full flex flex-col justify-center' : verticalView}">
-            <List :verticalView="verticalView" v-for="index in 5"></List>
-            <div @click="handleNewList" class="flex items-center justify-center border bg-gray-100 mt-4  w-[300px] min-h-[50px] rounded-lg shadow-md h-max " :class="{ 'bg-white' : newList, 'w-[700px] mx-auto' : verticalView }">
+        <div id="main" class="inline-flex  min-h-[calc(100vh_-_122px)] mt-12" :class="{'w-full flex flex-col justify-center !mt-0' : verticalView}">
+            <List :verticalView="verticalView" v-for="list in Lists" :list="list" ></List>
+            <div @click="handleNewList" class="flex items-center justify-center border bg-gray-100 mt-4  w-[300px] min-h-[50px] rounded-lg shadow-md h-max " :class="{ 'bg-white' : newList, '!w-[700px] mx-auto' : verticalView }">
                <div v-if="!newList" class="flex">
                     <span>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
