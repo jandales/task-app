@@ -6,7 +6,7 @@
 
     const props = defineProps({
         verticalView : false,
-         list : Object,
+        list : Array,
     })     
 
     const newTask = ref(false)
@@ -52,8 +52,7 @@
         store.dispatch('deleteList', id) 
         isActionOpen.value = false;
     }
-
-
+   
     document.addEventListener('click', handleCloseNewTask)
 
 </script>

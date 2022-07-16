@@ -1,6 +1,8 @@
 <script setup> 
     import { ref, computed } from 'vue'
     import { useStore } from 'vuex'
+    import Board from './Board.vue';
+
      const store = useStore();
 
     const props = defineProps({
@@ -8,8 +10,7 @@
     }) 
 
     const main = ref()
-    const newBoard = ref(false);
-    const isEdit = ref(false);
+    const newBoard = ref(false);  
     const input = ref()
     
     const emit = defineEmits(['close'])
@@ -18,31 +19,20 @@
         newBoard.value =  newBoard.value == false ? true : false;
     }
 
-    const edit = () => {
-        isEdit.value = true;
-    }
 
     const close = (event) => { 
          if(event.target == main.value){       
             emit('close');
             newBoard.value =false;
         } 
-    }
+    }  
+
+
     const addBoard = () => {
         store.dispatch('addBoard',input.value)
         input.value = null;
         newBoard.value = false
-    }
-
-    const updateBoard = (event, id) => {
-        store.dispatch('updateBoard',{ name : event.target.value, id : id})
-        isEdit.value = false;
-    }
-
-    const deleteBoard = (id) => {
-        store.dispatch('deleteBoard', id);
-        
-    }
+    }  
 
     const boards =  computed(()=> {
         return store.getters.boards
@@ -53,7 +43,7 @@
 </script>
 <template>
 <div @click="close($event)" ref="main" id="main-wrapper" class="hidden w-full min-h-screen fixed z-20 top-0 left-0 bg-black bg-opacity-50 transition-all ease-in-out duration-[500ms]" :class="{'!block' : isOpen}">
-    <div class="w-[300px] min-h-screen bg-white fixed left-[-300px] transition-all ease-in-out duration-[300ms]" :class="{'!left-0' : isOpen}" >
+    <div id="sidebar" class="w-[300px] min-h-screen bg-white fixed left-[-300px] transition-all ease-in-out duration-[300ms]" :class="{'!left-0' : isOpen}" >
         <div class="border-b px-4 py-1">
            <div class="flex items-center">
                 <img src="../assets/icon-logo.png" alt=""/>
@@ -61,7 +51,8 @@
            </div>
         </div>
          <div class="border-b px-4 py-2">
-            <div  v-for="board in boards" class="group flex items-center justify-between">
+            <Board v-for="board in boards" :board="board"></Board>
+            <!-- <div  v-for="board in boards" class="group flex items-center justify-between">
                 <div v-if="!isEdit"  class="flex items-center cursor-pointer text-gray-500 text-base">
                     <div class="flex items-center w-10 h-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -91,7 +82,7 @@
                         </svg>
                     </span>
                 </div>
-            </div>
+            </div> -->
             
           
 
