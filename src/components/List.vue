@@ -1,6 +1,9 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
-    import { useStore } from 'vuex';  
+    import AddTaskVue from './AddTask.vue';
+    import Task from './Task.vue';
+    import { ref, onMounted, computed } from 'vue';
+    import { useStore } from 'vuex';
+    import Completed from './Completed.vue';  
 
     const store = useStore();
 
@@ -9,32 +12,29 @@
          list : Object,
     })     
 
-    const newTask = ref(false)
+  
     const isRenameState = ref(false);   
     const mainWrapper = ref()
     const isActionOpen = ref(false)
     const input = ref()
+    const collapseTask = ref(false)
+
+    function collapse(){
+        collapseTask.value = collapseTask.value ==  true ? false : true;
+    }
 
     function toggleActionButton(){
         isActionOpen.value = isActionOpen.value == true ? false : true;   
     }
 
-    function handelNewTask(){
-        newTask.value = true       
-    }
-
-
-
     function handleCloseNewTask(event) {         
-        if(event.target.id == 'main') {          
-           newTask.value = false;
+        if(event.target.id == 'main') {  
            isActionOpen.value = false;
-        }            
-    
+        }                
     }
+
     function renameState(){
-        isRenameState.value = true;
-      
+        isRenameState.value = true;      
     }
 
     function renameList(event, id){
@@ -53,8 +53,22 @@
         isActionOpen.value = false;
     }
 
+    const pending = computed(() => {
+        return props.list.tasks.filter(task => {
+            return task.status == 'pending';
+        })
+    })
+
+    const completed = computed(() => {
+        return props.list.tasks.filter(task => {
+            return task.status == 'completed';
+        })
+    })
+
 
     document.addEventListener('click', handleCloseNewTask)
+
+
 
 </script>
 <template>
@@ -69,38 +83,27 @@
                     </svg>
                 </span>
             </div>
-            <div class="block mt-4" >
-                <div @click="handelNewTask" ref="input" class="group flex items-center gap-2" :class="{'!hidden' : newTask}">
-                    <span class="block p-2 rounded-full group-hover:bg-sky-500 group-hover:!text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>                              
-                    </span>
-                    <label for="" class="group-hover:text-sky-500 text-sm">Add task</label>
-                </div>
-                <div class="items-center hidden" :class="{'!flex' : newTask}" >
-                    <input ref="input" type="text" class="w-full border-0 outline-none text-sm" placeholder="New task" />
-                    <span class="text-sky-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg> 
-                    </span>
-                </div>            
+            <div class="block mt-4" >            
+                <AddTaskVue :list="list"></AddTaskVue>
             </div>
             </div>            
             <ul>
-                    <li v-for="task in list.tasks" class="mb-2 group">
-                        <div class="w-full flex px-4 py-2 border-b border-t border-transparent group-hover:border-gray-100 group-hover:shadow-md">
-                            <input type="radio" id=""/>
-                            <input for="" class="ml-2 w-full capitalize text-sm" :value="task.name">
-                            <span class="hidden group-hover:block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                            </span>
-                        </div>
-                    </li>
+                <Task v-for="task in pending" :listId=list.id :task=task></Task>                
             </ul>
+
+            <div v-if="completed.length > 0" class="flex w-full p-4">
+                <label  for="" class="text-sm">Completed ({{completed.length}})</label>
+                <span @click="collapse" class="ml-auto" :class="{'rotate-180' : collapseTask}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"  fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </span>
+            </div>
+
+            <ul v-if="completed.length > 0 && collapseTask"> 
+                <Completed v-for="task in completed" :listId=list.id :task=task></Completed>                
+            </ul>
+
             <div class="hidden absolute top-0 right-[-230px] w-70 rounded-lg p-4 shadow-md bg-white border z-10
                         before:clip-path: polygon(50% 0%, 0 100%, 100% 100%)
                         before:absolute

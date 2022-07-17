@@ -13,6 +13,14 @@ const getters = {
     },
     count : state => {
         return state.boards.length;
+    },
+    maxID : (state) => {   
+        const length = state.boards.length;
+        if(length == 0) return 0;                 
+        return state.boards[length - 1].id; 
+    },
+    selectedBoard : () => {
+        return localStorage.getItem('selectedBoard')
     }
 }
 
@@ -31,13 +39,14 @@ const mutations = {
     },
     SET_BOARD(state, data){
         state.board = data;
-    }   
+    }  
 }
 
 const actions = {
 
-    addBoard({commit, getters}, data){      
-        const board = {id : getters.count, name: data, default : 0, list : [] }
+    addBoard({commit,getters, dispatch}, data){ 
+        let id = parseInt(getters.maxID) + 1     
+        const board = {id : id, name: data, default : 0, list : [] }
         commit('ADD_BOARD', board);
     },
 
@@ -60,6 +69,7 @@ const actions = {
 
     getBoard({commit, getters}, id) {       
         const boards = getters.boards;  
+        if(boards == null) return;
         let data  = null;  
         boards.forEach(board => {
             if(board.id == id) return data = board; 
@@ -67,27 +77,27 @@ const actions = {
         commit('SET_BOARD',data);
     },
 
-
-
-
     updateBoardList({commit, getters}, list){    
         let board = getters.board;  
         let boards = getters.boards;
     
+      
+
         boards = boards.filter(item => {           
             if(item.id == board.id){ 
                 item.list = list;
             }
+            
             return item;
-        }) 
-  
+        })        
+       
         commit('UPDATE_BOARDS', boards) 
 
     },
-  
-    
-    
-
+    selectedBaord({commit}, id){   
+        localStorage.setItem('selectedBoard', id)
+    }
+        
 
 }
 

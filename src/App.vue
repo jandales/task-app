@@ -4,36 +4,30 @@
 
 import Header from './components/Header.vue';
 import Content from './components/Content.vue';
-import { ref,onMounted  } from 'vue'
+import { ref, onMounted  } from 'vue'
 import { useStore } from 'vuex';
 
 const store = useStore();
 const verticalView = ref(false);
 
 function view(){   
-      verticalView.value = verticalView.value == false ? true : false;
+    verticalView.value = verticalView.value == false ? true : false;
 }
 
 function makeStorage(){
-    const data =  [{ id : 0, name : 'Main board', default : 1, list : [{id: 1, name : 'task', dueDate : '' ,isComplete : 0 }] }]; 
+    const data =  [{ id : 0, name : 'Main board', default : 1, list : [{id: 1, name : 'List',  tasks : [] }] }]; 
     if(localStorage.getItem('boards') == null){
        localStorage.setItem("boards", JSON.stringify(data));
-    }else{
-        store.dispatch('getBoard', 0);
-    }  
+       localStorage.setItem("selectedBoard", 0);
+       return;
+    } 
+    store.dispatch('getBoard', store.getters.selectedBoard);
+
 }
 
 onMounted(() => {
     makeStorage()
 })
-
-
-
-
-
-
-
-
 
 </script>
 

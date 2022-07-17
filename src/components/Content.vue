@@ -31,13 +31,9 @@ import { useStore  } from 'vuex';
     function storeList(event){
         const name = event.target.value;
         store.dispatch('addList', name);
-        store.dispatch('getBoard', 0);
+        store.dispatch('getBoard', store.getters.selectedBoard);
         newList.value = false;
-    }
-
-    
-
-
+    } 
 
     const board = computed(()=> {
         return store.getters.board;
@@ -45,21 +41,16 @@ import { useStore  } from 'vuex';
 
     onMounted(() => {
         store.dispatch('getList');
-    })
-
-    const list = computed(() => {
-        return store.getters.lists;
-    })
-   
+    })   
  
     document.addEventListener('click', handleCloseNewTask)
 
    
-
+  
 
 </script>
 <template>
-
+  
     <div ref="mainWrapper" class="relative  w-full mx-auto px-8 mt-16" :class="{ 'mb-8' : verticalView}">
         <div v-if="!verticalView" class="group fixed overflow-hidden w-full flex">
             <div  class="w-full flex items-center  mt-4  transition-all ease-in-out duration-300 ml-[-35px] cursor-default hover:ml-0"> 
@@ -68,12 +59,12 @@ import { useStore  } from 'vuex';
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 </span>
-                <h1 class="text-lg text-gray-500">Main Board</h1>
+                <h1 v-if="board" class="text-lg text-gray-500">{{board.name}}</h1>
             </div>                 
         </div>
         <div v-else class="group relative w-full flex">
              <div  class="flex justify-between border w-[700px] p-4  mt-8 mx-auto  rounded-lg shadow-md">
-                 <h1 class="text-lg text-gray-500">Main Board</h1>
+                 <h1 v-if="board" class="text-lg text-gray-500">{{board.name}}</h1>
                  <span @click="toggleActionButton" class="cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 !text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -105,10 +96,9 @@ import { useStore  } from 'vuex';
             </div>  
         </div>
         <div id="main" class="inline-flex  min-h-[calc(100vh_-_122px)] mt-12" :class="{'w-full flex flex-col justify-center !mt-0' : verticalView}">
-
+           
             <List v-if="board"  :verticalView="verticalView" v-for="list in board.list" :list="list" ></List>
-
-            
+           
             <div @click="handleNewList" class="flex items-center justify-center border bg-gray-100 mt-4  w-[300px] min-h-[50px] rounded-lg shadow-md h-max " :class="{ 'bg-white' : newList, '!w-[700px] mx-auto' : verticalView }">
                <div v-if="!newList" class="flex">
                     <span>

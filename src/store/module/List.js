@@ -32,18 +32,17 @@ const mutations = {
 }
 
 const actions = {
-    getList({commit}){  
-        store.dispatch('getBoard', 0);
-        const list = store.getters.board.list;  
-  
+    getList({commit}){   
+        store.dispatch('getBoard', store.getters.selectedBoard) 
+        if(store.getters.board == null) return;     
+        const list = store.getters.board.list; 
         commit('SET_LIST', list);          
     },   
-    addList({commit, getters}, name){  
-        
+    addList({commit, getters}, name){          
         let count = parseInt(getters.lastItemID)
         let list = getters.list;    
         count = count + 1;
-        list.push({id : count, name: name})         
+        list.push({id : count, name: name, tasks : []})         
         commit('SET_LIST', list);
         store.dispatch('updateBoardList', list);
     },

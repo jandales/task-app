@@ -14,6 +14,12 @@
         emit('view')
     }
 
+    document.addEventListener('click', (event) => {
+        if(event.target.id == 'nav-board' || event.target.id == 'board'){
+            menuOpen.value = false;
+        }      
+    })
+
 </script>
 
 <template>
