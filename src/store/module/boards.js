@@ -99,6 +99,38 @@ const actions = {
         commit('UPDATE_BOARDS', boards) 
 
     },
+
+    search({commit, getters, dispatch}, name){
+   
+        dispatch('getBoard', getters.selectedBoard)
+        let board = getters.board;
+
+        // let  list  = board.list.filter(item => { 
+        //     if( item.name == name){              
+        //         return item;
+        //     }                        
+        // }) 
+        let list  = board.list;
+        let newList = [];
+
+        for (let i = 0; i < list.length; i++) {            
+            if( list[i].name.toLowerCase() == name.toLowerCase()){              
+                newList.push(list[i])              
+            }             
+            for(let j = 0; j < list[i].tasks.length; j++){          
+                if(list[i].tasks[j].name.toLowerCase() == name.toLowerCase()){
+                    newList.push(list[i])
+                }
+            }            
+        }
+        
+      
+       
+        board.list = newList;
+        commit('SET_BOARD',board)
+       
+    },
+
     selectedBaord({commit}, id){   
         localStorage.setItem('selectedBoard', id)
     }

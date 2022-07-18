@@ -6,6 +6,8 @@
     const store = useStore();
     const menuOpen = ref(false);
     const verticalView = ref(false);
+     const showSearchClose = ref(false);
+    const searchInput =  ref();
 
     const emit = defineEmits(['view'])
 
@@ -16,6 +18,22 @@
 
     function refresh(){
         store.dispatch('getBoard',store.getters.selectedBoard);
+    }
+
+    function close(){
+        store.dispatch('getBoard',store.getters.selectedBoard);
+        searchInput.value = null; 
+        showSearchClose.value = false; 
+
+    }
+
+    function search() {
+        if(searchInput.value == null){
+            close();
+            return;                    
+        }
+        showSearchClose.value = true;      
+        store.dispatch('search', searchInput.value)
     }
 
     document.addEventListener('click', (event) => {
@@ -50,8 +68,13 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
+                </span> 
+                <input type="text" @input="search" v-model="searchInput" class="w-full border-0 bg-transparent mr-4 outline-none" placeholder="Search">
+                <span @click="close" class="hidden p-1 mr-4 rounded-full hover:bg-rose-400 hover:text-white" :class="{'!block' : showSearchClose}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </span>
-                <input type="text" class="border-0 bg-transparent mr-4 outline-none" placeholder="Search">
             </div>
 
             <div class="flex items-center">
