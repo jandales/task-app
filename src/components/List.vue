@@ -51,6 +51,7 @@
 
     function deleteList(id){      
         store.dispatch('deleteList', id) 
+        store.dispatch('getBoard', store.getters.selectedBoard);   
         isActionOpen.value = false;
     }
 

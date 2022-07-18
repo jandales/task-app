@@ -55,8 +55,7 @@ const actions = {
             }           
         }
         commit('SET_LIST', list);
-        store.dispatch('updateBoardList', list); 
-        store.dispatch('getBoard', 0);      
+        store.dispatch('updateBoardList', list);          
 
     },
 
