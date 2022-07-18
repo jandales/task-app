@@ -18,11 +18,9 @@ function makeStorage(){
     const data =  [{ id : 0, name : 'Main board', default : 1, list : [{id: 1, name : 'List',  tasks : [] }] }]; 
     if(localStorage.getItem('boards') == null){
        localStorage.setItem("boards", JSON.stringify(data));
-       localStorage.setItem("selectedBoard", 0);
-       return;
-    } 
+       localStorage.setItem("selectedBoard", 0);    
+    }
     store.dispatch('getBoard', store.getters.selectedBoard);
-
 }
 
 onMounted(() => {

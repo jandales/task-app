@@ -58,8 +58,7 @@ const actions = {
             if(task.id == params.taskId){
                 task.name = params.name;
             }
-        })
-    
+        })    
         commit('SET_TASKS', tasks)  
         //update list       
         dispatch('updateList', params.id)
@@ -86,17 +85,28 @@ const actions = {
             if (task.id != params.taskId) {
                 return task;
             }
-        })  
-          
+        }) 
         commit('SET_TASKS', tasks)  
         //update list       
         dispatch('updateList', params.id)
     },
 
+    removeCompletedTask({commit, dispatch, getters}, id){
+        dispatch('getTasks',id)
+        let tasks = getters.tasks; 
+        tasks = tasks.filter(task => {
+            if(task.status != 'completed'){
+                return task;
+            }
+        }) 
+        commit('SET_TASKS', tasks)  
+        //update list       
+        dispatch('updateList',id)
+    },
+
     updateList({getters}, id) {
 
-        let board = store.getters.board;       
-
+        let board = store.getters.board;
         const  list =  board.list.filter(item => {
             if (item.id == id) { 
                 item.tasks = getters.tasks;

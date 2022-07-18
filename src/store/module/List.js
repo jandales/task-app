@@ -49,31 +49,27 @@ const actions = {
     deleteList({commit,getters}, id){
       
         let list = getters.list; 
-
         for (let i = 0; i < list.length; i++) {
             if(list[i].id == id){
                 list.splice(i,1);
             }           
         }
-
         commit('SET_LIST', list);
-
         store.dispatch('updateBoardList', list); 
         store.dispatch('getBoard', 0);      
 
     },
 
+
+
     renameList({getters}, params){
-
         let list = getters.list; 
-
         list.forEach(item => {
             if(item.id == params.id){
                 item.name = params.name;
             }
             return item;
-        }) 
-
+        })
         store.dispatch('updateBoardList', list); 
         store.dispatch('getBoard', 0);  
     },

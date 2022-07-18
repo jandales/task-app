@@ -4,8 +4,7 @@ const state = {
 }
 
 const getters = {
-    boards : (state) => { 
-        state.boards = JSON.parse(localStorage.getItem('boards'))
+    boards : (state) => {        
         return state.boards;
     },
     board : (state) => {
@@ -39,7 +38,11 @@ const mutations = {
     },
     SET_BOARD(state, data){
         state.board = data;
-    }  
+    },
+    SET_BOARDS(state, data){
+        state.boards = data;  
+    }
+
 }
 
 const actions = {
@@ -50,15 +53,15 @@ const actions = {
         commit('ADD_BOARD', board);
     },
 
-    deleteBoard({commit, getters}, payload){
-       const boards = getters.boards;
+    deleteBoard({commit,dispatch}, payload){
+       const boards = JSON.parse(localStorage.getItem('boards'))    
        const data = boards.filter(board => {
             return board.id != payload;
        })
-       commit('UPDATE_BOARDS', data);
+       commit('UPDATE_BOARDS', data);    
     },
 
-    renameBoard({commit, getters}, params) {
+    renameBoard({commit, getters}, params) {  
         const boards = getters.boards;
         const data = boards.filter(board => {
                 if(board.id == params.id)   board.name = params.name;
@@ -66,23 +69,25 @@ const actions = {
         })  
         commit('UPDATE_BOARDS', data);
     },
-
-    getBoard({commit, getters}, id) {       
-        const boards = getters.boards;  
+    getBoards({commit}) {       
+        const boards = JSON.parse(localStorage.getItem('boards')) 
+        if(boards == null) return;       
+        commit('SET_BOARDS', boards);
+    },
+    getBoard({commit}, id) { 
+        const boards = JSON.parse(localStorage.getItem('boards'))  
         if(boards == null) return;
         let data  = null;  
         boards.forEach(board => {
             if(board.id == id) return data = board; 
         }) 
-        commit('SET_BOARD',data);
+        commit('SET_BOARD', data);
     },
 
     updateBoardList({commit, getters}, list){    
         let board = getters.board;  
         let boards = getters.boards;
-    
-      
-
+        
         boards = boards.filter(item => {           
             if(item.id == board.id){ 
                 item.list = list;
