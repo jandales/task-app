@@ -37,15 +37,15 @@ const actions = {
     addBoard({commit,getters, dispatch}, data){ 
 
         let id = parseInt(getters.maxID) + 1     
-        const board = {id : id, name: data, default : 0, list : [] } 
-
-      
+        const board = {id : id, name: data, default : 0, list : [] }       
 
         dispatch('getBoards')       
         let boards = getters.boards;
 
         boards = [...boards, board]              
         dispatch('updateBoards', boards); 
+
+        dispatch('getBoard', board.id)
 
         commit('SET_BOARDS', boards);
     },
