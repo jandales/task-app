@@ -52,7 +52,7 @@ import VerticalHeading from './VerticalHeading.vue';
        
         <HorizontalHeading v-if="!verticalView" :board="board"></HorizontalHeading>
         <VerticalHeading v-else :board="board"></VerticalHeading>
-        <div id="main" class="inline-flex  min-h-[calc(100vh_-_130px)] mt-12" :class="{'w-full flex flex-col justify-center !mt-0' : verticalView}">           
+        <div id="main" class="inline-flex   min-h-[calc(100vh_-_130px)] mt-12" :class="{'w-full flex flex-col !mt-0' : verticalView}">           
             <List v-if="board"  :verticalView="verticalView" v-for="list in board.list" :list="list" ></List>           
             <div @click="handleNewList" class="flex items-center justify-center border bg-gray-100 mt-4  w-[300px] min-h-[50px] rounded-lg shadow-md h-max" :class="{ 'bg-white' : newList, '!w-[700px] mx-auto' : verticalView , 'mr-8' : !verticalView}">
                <div v-if="!newList" class="flex">
