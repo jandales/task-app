@@ -38,12 +38,14 @@ const actions = {
         const list = store.getters.board.list; 
         commit('SET_LIST', list);          
     },   
-    addList({commit, getters}, name){          
+    addList({commit, getters, dispatch}, name){   
+        dispatch('getList');
         let count = parseInt(getters.lastItemID)
         let list = getters.list;    
         count = count + 1;
-        list.push({id : count, name: name, tasks : []})         
+        list.push({id : count, name: name, tasks : []})              
         commit('SET_LIST', list);
+        console.log(list);
         store.dispatch('updateBoardList', list);
     },
     deleteList({commit,getters}, id){

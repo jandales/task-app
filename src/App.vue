@@ -4,7 +4,7 @@
 
 import Header from './components/Header.vue';
 import Content from './components/Content.vue';
-import { ref, onMounted  } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -15,11 +15,18 @@ function view(){
 }
 
 function makeStorage(){
+
     const data =  [{ id : 0, name : 'Main board', default : 1, list : [{id: 1, name : 'List',  tasks : [] }] }]; 
-    if(localStorage.getItem('boards') == null){
+
+    store.dispatch('getBoards')
+
+    const boards = store.getters.boards;
+
+    if(boards == null || boards.length == 0){
        localStorage.setItem("boards", JSON.stringify(data));
        localStorage.setItem("selectedBoard", 0);    
     }
+    
     store.dispatch('getBoard', store.getters.selectedBoard);
 }
 

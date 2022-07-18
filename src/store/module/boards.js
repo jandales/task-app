@@ -23,34 +23,31 @@ const getters = {
     }
 }
 
-const mutations = {
-    ADD_BOARD(state, data){
-        state.boards.push(data);
-        localStorage.setItem('boards', JSON.stringify(state.boards));
-    },
-    UPDATE_BOARDS(state, data) {
-        state.boards = data;
-        localStorage.setItem('boards', JSON.stringify(state.boards));
-    },
-    UPDATE_BOARD(state, data) {
-        state.board = data;
-        localStorage.setItem('boards', JSON.stringify(state.boards));
-    },
+const mutations = {  
     SET_BOARD(state, data){
         state.board = data;
     },
     SET_BOARDS(state, data){
         state.boards = data;  
     }
-
 }
 
 const actions = {
 
     addBoard({commit,getters, dispatch}, data){ 
+
         let id = parseInt(getters.maxID) + 1     
-        const board = {id : id, name: data, default : 0, list : [] }
-        commit('ADD_BOARD', board);
+        const board = {id : id, name: data, default : 0, list : [] } 
+
+      
+
+        dispatch('getBoards')       
+        let boards = getters.boards;
+
+        boards = [...boards, board]              
+        dispatch('updateBoards', boards); 
+
+        commit('SET_BOARDS', boards);
     },
 
     deleteBoard({commit,dispatch}, payload){
@@ -58,22 +55,26 @@ const actions = {
        const data = boards.filter(board => {
             return board.id != payload;
        })
-       commit('UPDATE_BOARDS', data);    
+       commit('SET_BOARDS', data); 
+       dispatch('updateBoards', data); 
     },
 
-    renameBoard({commit, getters}, params) {  
+    renameBoard({commit, getters, dispatch}, params) {  
         const boards = getters.boards;
         const data = boards.filter(board => {
                 if(board.id == params.id)   board.name = params.name;
                 return board;
-        })  
-        commit('UPDATE_BOARDS', data);
+        })          
+        commit('SET_BOARDS', data);
+        dispatch('updateBoards', data)
     },
+
     getBoards({commit}) {       
         const boards = JSON.parse(localStorage.getItem('boards')) 
         if(boards == null) return;       
-        commit('SET_BOARDS', boards);
+        commit('SET_BOARDS', boards);        
     },
+
     getBoard({commit}, id) { 
         const boards = JSON.parse(localStorage.getItem('boards'))  
         if(boards == null) return;
@@ -84,32 +85,29 @@ const actions = {
         commit('SET_BOARD', data);
     },
 
-    updateBoardList({commit, getters}, list){    
+    updateBoardList({commit, getters, dispatch}, list){         
+      
+
+        dispatch('getBoards');
         let board = getters.board;  
         let boards = getters.boards;
-        
+      
         boards = boards.filter(item => {           
             if(item.id == board.id){ 
                 item.list = list;
-            }
-            
+            }            
             return item;
-        })        
-       
-        commit('UPDATE_BOARDS', boards) 
-
+        })  
+     
+        commit('SET_BOARDS', boards) 
+        dispatch('updateBoards', boards)
     },
 
     search({commit, getters, dispatch}, name){
    
         dispatch('getBoard', getters.selectedBoard)
         let board = getters.board;
-
-        // let  list  = board.list.filter(item => { 
-        //     if( item.name == name){              
-        //         return item;
-        //     }                        
-        // }) 
+       
         let list  = board.list;
         let newList = [];
 
@@ -123,9 +121,7 @@ const actions = {
                 }
             }            
         }
-        
-      
-       
+
         board.list = newList;
         commit('SET_BOARD',board)
        
@@ -133,6 +129,11 @@ const actions = {
 
     selectedBaord({commit}, id){   
         localStorage.setItem('selectedBoard', id)
+    }, 
+
+    updateBoards({commit}, boards){
+      
+        localStorage.setItem('boards', JSON.stringify(boards));
     }
         
 
