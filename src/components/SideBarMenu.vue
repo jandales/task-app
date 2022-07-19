@@ -30,6 +30,7 @@
 
     const addBoard = () => {
         store.dispatch('addBoard',input.value)
+    
         input.value = null;
         newBoard.value = false
     }  

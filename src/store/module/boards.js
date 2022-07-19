@@ -47,6 +47,8 @@ const actions = {
 
         dispatch('getBoard', board.id)
 
+        dispatch('selectedBaord', board.id)
+
         commit('SET_BOARDS', boards);
     },
 

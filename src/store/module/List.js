@@ -44,8 +44,7 @@ const actions = {
         let list = getters.list;    
         count = count + 1;
         list.push({id : count, name: name, tasks : []})              
-        commit('SET_LIST', list);
-        console.log(list);
+        commit('SET_LIST', list);    
         store.dispatch('updateBoardList', list);
     },
     deleteList({commit,getters}, id){
