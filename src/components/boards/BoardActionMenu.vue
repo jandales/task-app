@@ -1,5 +1,16 @@
 <template>
-        <ul v-if="board"  class="hidden absolute top-0 right-[80px] mt-2 w-70 rounded-lg p-4 shadow-md bg-white border z-30" :class="{'!block' : isOpen,  'right-[130px] !mt-8' : vertical}">
+        <ul v-if="board"  class="hidden
+        absolute top-0
+        right-8
+        lg:right-[80px]
+        mt-2 
+        w-70
+        rounded-lg
+        p-4
+        shadow-md
+        bg-white
+        border
+       " :class="{'!block' : isOpen,  'right-[130px] !mt-8' : vertical}">
                 <li>                     
                     <button @click="showRename" :disabled="board.default == 1" class="flex items-center gap-2 text-sm py-1 text-gray-500" :class="{'hover:cursor-not-allowed' : board.default == 1}">  
                         <span>
@@ -10,7 +21,7 @@
                         Rename Board                            
                     </button>
                 </li>                   
-                <li>
+                <li class="hover:text-sky-500">
                     <button @click="confirmDelete" :disabled="board.default == 1" class="text-gray-500 flex text-sm py-1 items-center gap-2" :class="{'hover:cursor-not-allowed' : board.default == 1}">
                         <span>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -21,24 +32,27 @@
                     </button>
                 </li>                    
             </ul> 
-            <RenameBoard 
+            
+            <BoardRename 
                 v-if="board" 
                 @renameBoard="rename"
                 @close="showRenameModal=false"
                 :boardName="board.name"
-                :show="showRenameModal">
-            </RenameBoard>
+                :show="showRenameModal"
+            />
+           
             <ConfirmDelete 
                 @result="destroy"
                 :show="showModalDelete" 
                 :heading="`Are you sure to delete this list?`" 
-                :message="`All tasks and List in this Board will also be deleted. This action cannot be reverted.`">
-            </ConfirmDelete>  
+                :message="`All tasks and List in this Board will also be deleted. This action cannot be reverted.`"
+            />  
             
 </template>
 <script setup>
-    import ConfirmDelete from './ConfirmDelete.vue';
-    import RenameBoard from './RenameBoard.vue';
+
+    import ConfirmDelete from './BoardConfirmDelete.vue';
+    import BoardRename from './BoardRename.vue';
     import { ref } from 'vue';
     import { useStore } from 'vuex';
 

@@ -1,57 +1,56 @@
 <script setup> 
-    import { ref, computed, onMounted } from 'vue'
-    import { useStore } from 'vuex'
-    import Board from './Board.vue';
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
-     const store = useStore();
+import Board from '../boards/Board.vue';
 
-    const props = defineProps({
-        isOpen: false,
-    }) 
+const store = useStore();
 
-    const main = ref()
-    const newBoard = ref(false);  
-    const input = ref()
-    
-    const emit = defineEmits(['close'])
+const props = defineProps({
+    isOpen: false,
+}) 
 
-    const handleNewBoard = () => {
-        newBoard.value =  newBoard.value == false ? true : false;
-    }
+const main = ref()
+const newBoard = ref(false);  
+const input = ref()
 
+const emit = defineEmits(['close'])
 
-    const close = (event) => { 
-         if(event.target == main.value){       
-            emit('close');
-            newBoard.value =false;
-        } 
-    }  
+const handleNewBoard = () => {
+    newBoard.value =  newBoard.value == false ? true : false;
+}
 
 
-    const addBoard = () => {
-        store.dispatch('addBoard',input.value)
-    
-        input.value = null;
-        newBoard.value = false
-    }  
+const close = (event) => { 
+        if(event.target == main.value){       
+        emit('close');
+        newBoard.value =false;
+    } 
+}  
 
-    onMounted(() => {
-        store.dispatch('getBoards');
-    })
 
-    const boards =  computed(()=> {
-        return store.getters.boards
-    })
- 
+const addBoard = () => {
+    store.dispatch('addBoard',input.value)    
+    input.value = null;
+    newBoard.value = false
+    emit('close');
+}  
 
-   
+onMounted(() => {
+    store.dispatch('getBoards');
+})
+
+const boards = computed( ()=> {
+    return store.getters.boards
+})
+
 </script>
 <template>
 <div @click="close($event)" ref="main" id="main-wrapper" class="hidden w-full min-h-screen fixed z-20 top-0 left-0 bg-black bg-opacity-50 transition-all ease-in-out duration-[500ms]" :class="{'!block' : isOpen}">
     <div id="sidebar" class="w-[300px] min-h-screen bg-white fixed left-[-300px] transition-all ease-in-out duration-[300ms]" :class="{'!left-0' : isOpen}" >
         <div class="border-b px-4 py-1">
            <div class="flex items-center">
-                <img src="../assets/icon-logo.png" alt=""/>
+                <img src="../../assets/icon-logo.png" alt=""/>
                 <label for="" class="ml-4  text-gray-500 text-[20px]">TaskBoard</label>
            </div>
         </div>

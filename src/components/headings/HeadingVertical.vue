@@ -1,5 +1,5 @@
 <template>
-        <div  class="group relative w-full flex">
+        <div  class="group relative w-full flex mb-4">
              <div  class="flex justify-between border w-[700px] p-4  mt-8 mx-auto  rounded-lg shadow-md">
                  <h1 v-if="board" class="text-lg text-gray-500">{{board.name}}</h1>
                  <span @click="toggleActionButton" class="cursor-pointer">
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-     import ActionMenu from './ActionMenu.vue';
+     import ActionMenu from '../boards/BoardActionMenu.vue'
     import { ref } from 'vue';
  
     const props = defineProps({

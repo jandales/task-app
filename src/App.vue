@@ -2,19 +2,18 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 
-import Header from './components/Header.vue';
-import Content from './components/Content.vue';
-import { ref, onMounted } from 'vue'
+import Header from './components/layouts/Header.vue';
+import Content from './components/layouts/Content.vue';
+import { ref, onMounted,provide } from 'vue'
 import { useStore } from 'vuex';
 
 const store = useStore();
 const verticalView = ref(false);
 
-function view(){   
-    verticalView.value = verticalView.value == false ? true : false;
-}
 
-function makeStorage(){
+
+
+const makeStorage = () =>  {
 
     const data =  [{ id : 0, name : 'Main board', default : 1, list : [{id: 1, name : 'List',  tasks : [] }] }]; 
 
@@ -34,14 +33,24 @@ onMounted(() => {
     makeStorage()
 })
 
+provide('verticalView', { 
+  verticalView,
+  toggleView : () => {
+    verticalView.value = verticalView.value == false ? true : false;
+  } 
+ });
+
+
 </script>
 
 <template>
-  <Header  @view="view"></Header>
-  <Content :verticalView="verticalView"></Content>
+  <Header/>
+  <Content />
 </template>
 
 <style>
+
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
