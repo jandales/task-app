@@ -1,28 +1,27 @@
 <template>
-    <ul>
-        <TaskCompleted 
-            v-for="task in tasks" 
-            :key="task.id" 
-            :task="task" 
-            @taskRemove=taskRemove
-        />
-    </ul>
+  <ul class="pb-2">
+    <TaskCompleted
+      v-for="task in tasks"
+      :key="task.id"
+      :task="task"
+      @taskRemove="taskRemove"
+    />
+  </ul>
 </template>
+
 <script setup>
 import { useStore } from 'vuex';
 import TaskCompleted from './TaskCompleted.vue';
 
-const store =  useStore();
+const store = useStore();
 
 const props = defineProps({
-    listId : Number,
-    tasks : Array,
+  listId: Number,
+  tasks: Array,
 })
 
 const taskRemove = id => {
-    const params = {id : listId, taskId : id}    
-    store.dispatch('removeTask', params)      
+  const params = { id: props.listId, taskId: id }
+  store.dispatch('removeTask', params)
 }
-
-
 </script>

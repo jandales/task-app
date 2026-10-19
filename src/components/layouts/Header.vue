@@ -1,99 +1,110 @@
 <script setup>
-    import { ref, inject } from 'vue';
-    import { useStore } from 'vuex';
-    import SideBarMenu from './SideBarMenu.vue';
+import { ref, inject } from 'vue';
+import { useStore } from 'vuex';
+import SideBarMenu from './SideBarMenu.vue';
 
-    const store = useStore();
-    const menuOpen = ref(false);
-    const showSearchClose = ref(false);
-    const searchInput =  ref();
+const store = useStore();
+const menuOpen = ref(false);
+const showSearchClose = ref(false);
+const searchInput = ref();
 
-    const emit = defineEmits(['view'])
+const emit = defineEmits(['view'])
 
-    const { verticalView, toggleView }= inject('verticalView');
+const { verticalView, toggleView } = inject('verticalView');
 
-    const refresh = () => {
-        store.dispatch('getBoard',store.getters.selectedBoard);
-    }
+const refresh = () => {
+  store.dispatch('getBoard', store.getters.selectedBoard);
+}
 
-    const close = () => {
-        store.dispatch('getBoard',store.getters.selectedBoard);
-        searchInput.value = null; 
-        showSearchClose.value = false; 
-    }
+const close = () => {
+  store.dispatch('getBoard', store.getters.selectedBoard);
+  searchInput.value = null;
+  showSearchClose.value = false;
+}
 
-    const search = () => {
-        if(searchInput.value == null) return close();
-        showSearchClose.value = true;      
-        store.dispatch('search', searchInput.value)
-    }
-
-    document.addEventListener('click', (event) => {
-        if(event.target.id == 'nav-board' || event.target.id == 'board'){
-            menuOpen.value = false;
-        }      
-    })
+const search = () => {
+  if (searchInput.value == null) return close();
+  showSearchClose.value = true;
+  store.dispatch('search', searchInput.value)
+}
 
 </script>
 
 <template>
-    <div class="fixed top-0 left-0 w-full flex items-center  bg-white border-b shadow-sm z-20">
-        <div class="w-full flex justify-between mx-auto p-2">
-            <div class="flex">
-                <div @click="menuOpen=true" class="ml-4 icon-menu rounded-full hover:bg-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </div>
-                <a href="" class=" hidden lg:flex  lg:items-center">
-                    <div class="w-10 h-10 flex items-center">
-                    <img src="../../assets/icon-logo.png" class="w-full h-full" alt="">                
-                    </div>
-                    <span class="ml-4 text-gray-500 text-[20px]">
-                        TaskBoard
-                    </span>
-                </a>
-            </div>
-            <!--Search-->
-            <div class="flex items-center border rounded-md w-full max-w-[500px] bg-gray-100">
-                <span class="px-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </span> 
-                <input type="text" @input="search" v-model="searchInput" class="w-full border-0 bg-transparent mr-4 outline-none" placeholder="Search">
-                <span @click="close" class="hidden p-1 mr-4 rounded-full hover:bg-rose-400 hover:text-white" :class="{'!block' : showSearchClose}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </span>
-            </div>
+  <header class="fixed top-0 left-0 z-30 w-full border-b border-white/10 bg-ink-soft/90 backdrop-blur-md">
+    <div class="flex h-14 w-full items-center justify-between gap-2 px-2 sm:px-3">
+      <div class="flex min-w-0 items-center gap-1">
+        <button
+          type="button"
+          aria-label="Open boards menu"
+          @click="menuOpen = true"
+          class="icon-btn"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <a href="" class="flex items-center gap-2.5 pl-1" aria-label="TaskBoard home">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-soft text-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </span>
+          <span class="font-display text-lg font-semibold tracking-tight text-mist hidden sm:inline">
+            TaskBoard
+          </span>
+        </a>
+      </div>
 
-            <div class="flex items-center">
-                <div @click="refresh" class="flex items-center justify-center w-10 h-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                </div>
-                <!-- view --> 
-                <div @click="toggleView" class="hidden w-10 h-10 lg:flex lg:items-center lg:justify-center">
-                    <svg v-if="!verticalView" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
-                    </svg>
-                    <svg  v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
-                    </svg>
-                </div>
+      <div class="flex w-full max-w-md items-center rounded-xl border border-white/10 bg-surface px-2 transition-colors focus-within:border-accent/40">
+        <span class="px-2 text-mist-faint" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </span>
+        <input
+          type="text"
+          @input="search"
+          v-model="searchInput"
+          class="w-full border-0 bg-transparent py-2.5 text-sm text-mist placeholder:text-mist-faint outline-none"
+          placeholder="Search lists & tasks"
+          aria-label="Search lists and tasks"
+        />
+        <button
+          type="button"
+          @click="close"
+          aria-label="Clear search"
+          class="hidden rounded-lg p-1.5 text-mist-muted transition-colors hover:bg-danger-soft hover:text-danger"
+          :class="{ '!inline-flex': showSearchClose }"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-              
-                <!-- <div class="icon-menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div> -->
-            </div>
-        </div>
+      <div class="flex items-center gap-0.5">
+        <button type="button" @click="refresh" class="icon-btn" aria-label="Refresh board" title="Refresh">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          @click="toggleView"
+          class="icon-btn hidden lg:inline-flex"
+          :aria-label="verticalView ? 'Switch to horizontal view' : 'Switch to vertical view'"
+          :title="verticalView ? 'Horizontal view' : 'Vertical view'"
+        >
+          <svg v-if="!verticalView" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V4zM8 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1H9a1 1 0 01-1-1V4zM15 3a1 1 0 00-1 1v12a1 1 0 001 1h2a1 1 0 001-1V4a1 1 0 00-1-1h-2z" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 7a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 13a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
     </div>
-      <SideBarMenu :isOpen="menuOpen"  @close="menuOpen=false"></SideBarMenu> 
+  </header>
+  <SideBarMenu :isOpen="menuOpen" @close="menuOpen = false" />
 </template>

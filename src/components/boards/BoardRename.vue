@@ -1,36 +1,37 @@
 <template>
-    <div id="modal-raname" class="hidden  w-full min-h-screen fixed z-50 top-0 left-0  bg-black bg-opacity-50 transition-all ease-in-out duration-[500ms]" :class="{'!flex items-center justify-center' : show}">
-        <div class="bg-white w-[350px] min-h-[100px] p-4 border shadow-xl rounded-xl">
-            <input  type="text"
-             @keyup.enter="rename"
-             :placeholder="boardName"
-             class="w-full p-2 border-b"
-             autofocus 
-            >
-        </div>
+  <div
+    id="modal-raname"
+    class="modal-backdrop"
+    :class="{ '!flex': show }"
+  >
+    <div class="w-[min(100%-2rem,380px)] rounded-2xl border border-white/10 bg-surface p-5 shadow-panel">
+      <p class="mb-3 font-display text-sm font-semibold text-mist">Rename board</p>
+      <input
+        type="text"
+        @keyup.enter="rename"
+        :placeholder="boardName"
+        class="field-input"
+        autofocus
+      >
     </div>
+  </div>
 </template>
 
 <script setup>
-const props = defineProps({  
-    boardName : String,
-    show : Boolean
+const props = defineProps({
+  boardName: String,
+  show: Boolean
 })
 
-const emit  =  defineEmits(['renameBoard','close'])
+const emit = defineEmits(['renameBoard', 'close'])
 
-function rename(event){
-    emit('renameBoard',event.target.value)
+function rename(event) {
+  emit('renameBoard', event.target.value)
 }
 
-document.addEventListener('click', function(e){
-   if(e.target.id == 'modal-raname'){
-        emit('close');
-   }
+document.addEventListener('click', function (e) {
+  if (e.target.id == 'modal-raname') {
+    emit('close');
+  }
 })
-
-
-
-
-
 </script>
